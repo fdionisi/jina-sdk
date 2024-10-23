@@ -115,10 +115,15 @@ impl Jina {
 
 #[cfg(test)]
 mod tests {
+    use std::sync::Arc;
+
+    use http_client_reqwest::HttpClientReqwest;
+
     use super::*;
 
     #[tokio::test]
     async fn test_embeddings() {
+        let http_client = Arc::new(HttpClientReqwest::default());
         let mut server = mockito::Server::new();
         let mock = server
             .mock("POST", "/v1/embeddings")
@@ -145,8 +150,9 @@ mod tests {
             .create();
 
         let client = Jina::builder()
-            .api_key("test-key".to_string())
-            .base_url(server.url())
+            .with_http_client(http_client)
+            .with_api_key("test-key".to_string())
+            .with_base_url(server.url())
             .build()
             .unwrap();
 

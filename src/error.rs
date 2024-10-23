@@ -3,7 +3,7 @@ use std::fmt;
 #[derive(Debug, thiserror::Error)]
 pub enum JinaError {
     #[error("Client error: {0}")]
-    ClientError(#[from] reqwest::Error),
+    ClientError(#[from] http_client::Error),
     #[error("HTTP error: {0}")]
     HttpError(HttpError),
 }
